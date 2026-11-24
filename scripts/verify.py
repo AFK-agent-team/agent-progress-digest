@@ -52,7 +52,7 @@ for filename in ("progress-digest.svg", "progress-digest-static.svg"):
     bubbles = [e for e in tree.iter() if e.attrib.get("id", "").startswith("assistant-bubble-")]
     assert bubbles
     for bubble in bubbles:
-        lines = [e.text for e in bubble.findall("s:text", ns)]
+        lines = [e.text for e in bubble.findall(".//s:text", ns)]
         assert len(lines) == 4 and not lines[0].startswith("[")
         tasks = lines[1:]
         assert all(re.fullmatch(r"\[(?: |x)\] .+", t) for t in tasks)
@@ -67,3 +67,12 @@ assert 'id="responsive-frame"' in animated
 for label in ('Bot details', 'Computer', 'Voice'):
     assert '>'+label+'</text>' in animated
 print("PASS: focused narrow composition, no redundant narration bubble, reference-supported detail labels")
+
+static = (root / "assets/progress-digest-static.svg").read_text()
+assert 'transform="translate(-260 -100) scale(1.5)"' in static
+assert '#left-panel,#right-panel{display:none}' in static
+assert 'Example 3/3 · replay next' in animated and 'Example 1/3 · 15-second loop' in animated
+for identity in ('mobile', 'publish', 'content'):
+    assert animated.count(f'data-task="{identity}"') == 3
+assert 23 * 1.5 * 390 / 1024 >= 13
+print("PASS: actual narrow static fallback, explicit replay semantics, stable task identities")
