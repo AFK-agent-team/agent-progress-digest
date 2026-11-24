@@ -6,7 +6,10 @@ This is a reporting skill, not a task runner, permission system, dashboard, or p
 
 ## See the format
 
-![Illustrative progress digest: one factual lead, unfinished tasks first, completed tasks retained](assets/progress-digest.svg)
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/progress-digest-static.svg">
+  <img src="assets/progress-digest.svg" alt="Illustrative progress digest: one factual lead, unfinished tasks first, completed tasks retained">
+</picture>
 
 Illustrative Grok Bot-style UI reconstruction, not live model output or a product recording. The three-panel mock places the TODO digest inside assistant chat bubbles. On narrow SVG viewports, the illustration focuses on the chat; full desktop context remains in the wide view. The 15-second SVG loop includes a gentle zoom in and out. Consistent colored task markers preserve identity when rows reorder; the example counter makes the replay explicit. Reduced-motion viewers get the first snapshot; a [chat-focused static version](assets/progress-digest-static.svg) is also available. Animation depends on the GitHub image viewer and browser; visual playback has not been verified on GitHub.
 

@@ -38,9 +38,9 @@ for filename in ("progress-digest.svg", "progress-digest-static.svg"):
     assert "url(" not in asset.read_text() and "@import" not in asset.read_text()
 animated = (root / "assets/progress-digest.svg").read_text()
 assert "prefers-reduced-motion:no-preference" in animated
-assert "15s" in animated and "scale(1.22)" in animated
+assert "15s" in animated and "scale(1.075)" in animated
 assert "@keyframes" not in (root / "assets/progress-digest-static.svg").read_text()
-assert "](assets/progress-digest.svg)" in readme
+assert 'src="assets/progress-digest.svg"' in readme
 assert "](assets/progress-digest-static.svg)" in readme
 print("PASS: SVG XML, accessibility labels, self-contained safety, motion fallback, README references")
 
@@ -76,3 +76,35 @@ for identity in ('mobile', 'publish', 'content'):
     assert animated.count(f'data-task="{identity}"') == 3
 assert 23 * 1.5 * 390 / 1024 >= 13
 print("PASS: actual narrow static fallback, explicit replay semantics, stable task identities")
+
+assert '@keyframes context' in animated and '.context-chrome{animation:context' in animated
+assert 'class="context-chrome"' in animated
+print("PASS: nonessential desktop context retires before the close-up to avoid clipped fragments")
+
+assert '@media (prefers-reduced-motion:reduce)' in animated
+assert 'animation:none!important' in animated and '.scene-0{opacity:1!important}' in animated
+assert '<source media="(prefers-reduced-motion: reduce)" srcset="assets/progress-digest-static.svg">' in readme
+assert 'transform-origin:0 0;transform-box:view-box' in animated
+print("PASS: explicit reduced-motion stop rules and parent picture fallback, explicit camera origin")
+
+for filename in ("progress-digest.svg", "progress-digest-static.svg"):
+    tree = ET.fromstring((root / "assets" / filename).read_text())
+    camera = next(e for e in tree.iter() if e.attrib.get("class") == "camera")
+    context = next(e for e in tree.iter() if e.attrib.get("id") == "desktop-context")
+    assert context not in list(camera.iter())
+    assert all(e.attrib.get("id") not in {"left-panel", "right-panel", "input-box"} and e.attrib.get("class") != "context-chrome" for e in camera.iter())
+    assert {"left-panel", "right-panel", "input-box"} <= {e.attrib.get("id") for e in context.iter()}
+print("PASS: desktop chrome is structurally outside the transformed chat camera")
+
+assert 'scale(1.22)' not in animated
+assert 'translate(-34px,-20px) scale(1.075)' in animated
+print("PASS: camera extrema use bounded 1.075x zoom, not overlapping 1.22x")
+
+# Authored conservative content envelope: all chat rects, lead/task text and
+# Example label. It must be safe even with fully opaque desktop context.
+for step in range(10001):
+    q = step / 10000
+    scale, tx, ty = 1 + .075*q, -34*q, -20*q
+    assert 191*scale+tx >= 168 and 806*scale+tx <= 834
+    assert 80*scale+ty >= 66-1e-9 and 465*scale+ty <= 516
+print("PASS: entire camera envelope stays between sidebars, below header, above input at all 10001 zoom fractions")
