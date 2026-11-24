@@ -4,6 +4,12 @@ Concise chat progress updates: one factual sentence, then a TODO checklist. Unfi
 
 This is a reporting skill, not a task runner, permission system, dashboard, or persistent bot configuration tool. It does not require a dedicated task tool.
 
+## See the format
+
+![Illustrative progress digest: one factual lead, unfinished tasks first, completed tasks retained](assets/progress-digest.svg)
+
+Illustrative reconstruction, not live model output or a product recording. The 15-second SVG loop includes a gentle zoom in and out. Reduced-motion viewers get the first snapshot; a [static version](assets/progress-digest-static.svg) is also available. Animation depends on the GitHub image viewer and browser; visual playback has not been verified on GitHub.
+
 ## Install
 
 ```bash

@@ -24,3 +24,22 @@ for path in root.rglob("*"):
         text = path.read_text()
         assert not any(re.search(p, text) for p in patterns), f"sensitive pattern: {path.name}"
 print("PASS: structure, frontmatter, eval JSON, install syntax fixture, digest example, sensitive-pattern checks")
+
+# README illustration: self-contained SVG image context, no active/external content.
+import xml.etree.ElementTree as ET
+for filename in ("progress-digest.svg", "progress-digest-static.svg"):
+    asset = root / "assets" / filename
+    tree = ET.fromstring(asset.read_text())
+    assert tree.attrib.get("viewBox") == "0 0 960 500"
+    assert tree.find("{http://www.w3.org/2000/svg}title") is not None
+    for element in tree.iter():
+        assert element.tag.split("}")[-1] not in {"script", "foreignObject", "image", "use", "a"}
+        assert not any(k.lower().startswith("on") or k.endswith("href") for k in element.attrib)
+    assert "url(" not in asset.read_text() and "@import" not in asset.read_text()
+animated = (root / "assets/progress-digest.svg").read_text()
+assert "prefers-reduced-motion:no-preference" in animated
+assert "15s" in animated and "scale(1.04)" in animated
+assert "@keyframes" not in (root / "assets/progress-digest-static.svg").read_text()
+assert "](assets/progress-digest.svg)" in readme
+assert "](assets/progress-digest-static.svg)" in readme
+print("PASS: SVG XML, accessibility labels, self-contained safety, motion fallback, README references")

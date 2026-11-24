@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-labelledby="title desc">
+<title id="title">Agent Progress Digest — from next steps to checked work</title>
+<desc id="desc">Illustrative reconstruction, not live output. One factual lead precedes unfinished tasks, then retained completed tasks. Three snapshots show content checking, mobile testing, and publishing.</desc>
+<style>
+text{font-family:system-ui,sans-serif} .task{font-family:ui-monospace,monospace;font-size:25px;fill:#e6edf3}.done{fill:#97ebc7}.lead{font-size:23px;fill:#edf4f7}.scene{opacity:0}.first{opacity:1}
+@keyframes first{0%,30%{opacity:1}31%,99.99%{opacity:0}100%{opacity:1}}
+@keyframes second{0%,32%{opacity:0}33%,63%{opacity:1}64%,100%{opacity:0}}
+@keyframes third{0%,65%{opacity:0}66%,99%{opacity:1}100%{opacity:0}}
+@keyframes camera{0%,15%,90%,100%{transform:translate(0,0) scale(1)}35%,65%{transform:translate(-19px,-10px) scale(1.04)}}
+@media (prefers-reduced-motion:no-preference){.first{animation:first 15s linear infinite}.second{animation:second 15s linear infinite}.third{animation:third 15s linear infinite}.camera{animation:camera 15s ease-in-out infinite}}
+</style>
+<rect width="960" height="500" rx="20" fill="#0b121b"/>
+<text x="44" y="53" fill="#9de8cb" font-size="19" letter-spacing="2">AGENT PROGRESS DIGEST</text>
+<text x="44" y="88" fill="#a7b8c7" font-size="17">One factual lead. Clear TODOs. Completed work stays visible.</text>
+<g class="camera"><rect x="38" y="120" width="884" height="305" rx="16" fill="#14202e" stroke="#3a526a"/>
+<g class="scene first">
+<text class="lead" x="66" y="176">The content check passed; mobile testing is next.</text>
+<text class="task" x="66" y="240">[ ] Check mobile layout</text>
+<text class="task" x="66" y="302">[ ] Publish the page</text>
+<text class="task done" x="66" y="364">[x] Check page content</text>
+</g>
+<g class="scene second">
+<text class="lead" x="66" y="176">Mobile testing passed; publishing is next.</text>
+<text class="task" x="66" y="240">[ ] Publish the page</text>
+<text class="task done" x="66" y="302">[x] Check mobile layout</text>
+<text class="task done" x="66" y="364">[x] Check page content</text>
+</g>
+<g class="scene third">
+<text class="lead" x="66" y="176">The page is published; all three checks are recorded.</text>
+<text class="task done" x="66" y="240">[x] Publish the page</text>
+<text class="task done" x="66" y="302">[x] Check mobile layout</text>
+<text class="task done" x="66" y="364">[x] Check page content</text>
+</g>
+</g><text x="44" y="464" fill="#a7b8c7" font-size="16">Illustrative reconstruction · not live output · 15-second loop</text>
+</svg>
