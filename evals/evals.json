@@ -1,0 +1,38 @@
+{
+  "skill_name": "agent-progress-digest",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "页面内容已核对；移动端还没测试；未发布。用 TODO digest 汇报。",
+      "expected_output": "一句真实 lead；两个未完成项在前；内容项勾选且保留。",
+      "files": [],
+      "expectations": [
+        "one lead sentence",
+        "unfinished first",
+        "completed retained",
+        "no unsupported completion"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "报告：文案修正已验证。发布被审批阻塞。不要另建看板。",
+      "expected_output": "阻塞写在 lead；发布保持未勾选；不带状态词或 metadata。",
+      "files": [],
+      "expectations": [
+        "blocker in lead",
+        "blocked task unchecked",
+        "no board",
+        "titles only"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "2 + 2 等于几？",
+      "expected_output": "正常简短回答，不编造任务。",
+      "files": [],
+      "expectations": [
+        "no fabricated TODO list"
+      ]
+    }
+  ]
+}
