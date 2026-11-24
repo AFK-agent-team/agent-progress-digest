@@ -30,7 +30,7 @@ import xml.etree.ElementTree as ET
 for filename in ("progress-digest.svg", "progress-digest-static.svg"):
     asset = root / "assets" / filename
     tree = ET.fromstring(asset.read_text())
-    assert tree.attrib.get("viewBox") == "0 0 960 500"
+    assert tree.attrib.get("viewBox") == "0 0 1024 663"
     assert tree.find("{http://www.w3.org/2000/svg}title") is not None
     for element in tree.iter():
         assert element.tag.split("}")[-1] not in {"script", "foreignObject", "image", "use", "a"}
@@ -38,8 +38,25 @@ for filename in ("progress-digest.svg", "progress-digest-static.svg"):
     assert "url(" not in asset.read_text() and "@import" not in asset.read_text()
 animated = (root / "assets/progress-digest.svg").read_text()
 assert "prefers-reduced-motion:no-preference" in animated
-assert "15s" in animated and "scale(1.04)" in animated
+assert "15s" in animated and "scale(1.22)" in animated
 assert "@keyframes" not in (root / "assets/progress-digest-static.svg").read_text()
 assert "](assets/progress-digest.svg)" in readme
 assert "](assets/progress-digest-static.svg)" in readme
 print("PASS: SVG XML, accessibility labels, self-contained safety, motion fallback, README references")
+
+for panel in ("left-panel", "chat-panel", "right-panel", "user-bubble", "assistant-bubble-1", "input-box"):
+    assert f'id="{panel}"' in animated
+ns = {"s": "http://www.w3.org/2000/svg"}
+for filename in ("progress-digest.svg", "progress-digest-static.svg"):
+    tree = ET.fromstring((root / "assets" / filename).read_text())
+    bubbles = [e for e in tree.iter() if e.attrib.get("id", "").startswith("assistant-bubble-")]
+    assert bubbles
+    for bubble in bubbles:
+        lines = [e.text for e in bubble.findall("s:text", ns)]
+        assert len(lines) == 4 and not lines[0].startswith("[")
+        tasks = lines[1:]
+        assert all(re.fullmatch(r"\[(?: |x)\] .+", t) for t in tasks)
+        assert "[x] Check page content" in tasks
+        marks = [t.startswith("[x]") for t in tasks]
+        assert marks == sorted(marks)
+print("PASS: three panels, user bubble, assistant digest bubbles, input box, task ordering and retained completion")
