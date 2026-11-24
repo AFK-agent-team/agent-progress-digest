@@ -60,3 +60,10 @@ for filename in ("progress-digest.svg", "progress-digest-static.svg"):
         marks = [t.startswith("[x]") for t in tasks]
         assert marks == sorted(marks)
 print("PASS: three panels, user bubble, assistant digest bubbles, input box, task ordering and retained completion")
+
+assert 'assistant-context' not in animated
+assert '@media (max-width:600px)' in animated
+assert 'id="responsive-frame"' in animated
+for label in ('Bot details', 'Computer', 'Voice'):
+    assert '>'+label+'</text>' in animated
+print("PASS: focused narrow composition, no redundant narration bubble, reference-supported detail labels")
