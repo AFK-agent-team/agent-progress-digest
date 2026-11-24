@@ -47,32 +47,6 @@ After (same facts, no extra claims):
 
 Blocked or unverified tasks stay unchecked. Put necessary blocker context in the lead sentence, not beside task titles. Single-step answers need no invented checklist. No Page or separate board is created.
 
-## Deterministic SVG playback and review
-
-Node.js 18+; no third-party runtime dependencies, DOM, network, clock, or randomness. The original UI reconstruction is a small string template; both frame exports and the README animation are generated from `src/progress-digest.mjs`.
-
-```js
-import { f, debug_view } from './src/progress-digest.mjs';
-const svg = f(7.5); // standalone SVG string; same input gives the same bytes
-const review = debug_view(7.5); // scene, camera, lead, tasks, normalized time
-const mobile = f(7.5, { width: 390 });
-const still = f(7.5, { reducedMotion: true }); // meaningful first frame
-```
-
-```bash
-node scripts/render.mjs --time 7.5 --out-dir frames
-node scripts/render.mjs --time 10 --width 390 --out-dir frames
-node scripts/render.mjs --sample --out-dir frames
-node scripts/render.mjs --build
-node scripts/render.mjs --check
-```
-
-The CLI writes paired SVG + JSON files; `--sample` covers 15 boundary/interior times at both 1280 and 390 widths. `--build` regenerates the two committed README SVGs; `--check` detects drift. For a PNG contact sheet, render those SVGs with a static SVG renderer; no browser or video recording is required.
-
-Time is nonnegative finite seconds, looping modulo 15. Scenes switch exactly at 5 and 10 seconds; 15 resets to the first frame. Invalid times and nonpositive/nonfinite widths throw. Camera interpolation is linear between shared keyframes; scene transitions are discrete, without empty crossfade gaps. Reduced motion freezes the first frame. Narrow exports focus on chat and disable camera movement.
-
-Seek by calling `f(targetSeconds)`. Pause by keeping that time constant; playback speed is the caller's time multiplier (`f(positionSeconds * rate)`). This is a deterministic frame API, not a recorder or media player. `debug_view(t)` describes exactly the illustrative state used by `f(t)`; it is not production task telemetry. Browser CSS animation and image-context responsive behavior still need browser playback verification; static samples do not prove those behaviors.
-
 ## Verify
 
 ```bash

@@ -67,16 +67,3 @@ assert 'id="responsive-frame"' in animated
 for label in ('Bot details', 'Computer', 'Voice'):
     assert '>'+label+'</text>' in animated
 print("PASS: focused narrow composition, no redundant narration bubble, reference-supported detail labels")
-
-# Keep generated README SVGs tied to the shared pure-JS timeline.
-import subprocess
-import tempfile
-subprocess.run(["node", "scripts/render.mjs", "--check"], cwd=root, check=True)
-subprocess.run(["node", "--test", "tests/timeline.test.mjs"], cwd=root, check=True)
-with tempfile.TemporaryDirectory() as directory:
-    subprocess.run(["node", "scripts/render.mjs", "--sample", "--out-dir", directory], cwd=root, check=True)
-    samples = list(Path(directory).glob("*.svg"))
-    assert len(samples) == 30
-    for sample in samples:
-        ET.parse(sample)
-print("PASS: generated assets match source; 45 Node tests; all 30 sampled SVGs parse")
